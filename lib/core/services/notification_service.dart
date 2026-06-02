@@ -1,23 +1,20 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:io';
 
 class NotificationService {
   NotificationService._();
 
-  static final NotificationService instance =
-      NotificationService._();
+  static final NotificationService instance = NotificationService._();
 
-  final FlutterLocalNotificationsPlugin
-      _notificationsPlugin =
+  final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
-    const androidSettings =
-        AndroidInitializationSettings(
+    const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
 
-    const settings =
-        InitializationSettings(
+    const settings = InitializationSettings(
       android: androidSettings,
     );
 
@@ -31,16 +28,18 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
-    const androidDetails =
-        AndroidNotificationDetails(
+    if (Platform.isLinux) {
+      return;
+    }
+
+    const androidDetails = AndroidNotificationDetails(
       'campuspulse_channel',
       'CampusPulse Notifications',
       importance: Importance.max,
       priority: Priority.high,
     );
 
-    const notificationDetails =
-        NotificationDetails(
+    const notificationDetails = NotificationDetails(
       android: androidDetails,
     );
 

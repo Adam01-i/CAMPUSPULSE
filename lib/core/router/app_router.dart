@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import '../../features/schedule/presentation/pages/schedule_page.dart';
+import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -8,7 +8,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) {
-        return const SchedulePage();
+        return const DashboardPage();
       },
     ),
   ],

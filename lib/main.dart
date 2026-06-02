@@ -1,10 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/services/notification_service.dart';
-import 'core/router/app_router.dart';
+import 'features/navigation/presentation/pages/main_navigation_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
-  await NotificationService.instance.initialize();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!Platform.isLinux) {
+    await NotificationService.instance.initialize();
+  }
+
+  await initializeDateFormatting('fr_FR', null);
+
   runApp(
     const ProviderScope(
       child: CampusPulseApp(),
@@ -17,15 +27,13 @@ class CampusPulseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'CampusPulse',
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routerConfig: appRouter,
-
+      title: 'CampusPulse',
       theme: ThemeData(
-        colorSchemeSeed: Colors.blue,
         useMaterial3: true,
       ),
+      home: const MainNavigationPage(),
     );
   }
 }

@@ -1,40 +1,18 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// lib/features/schedule/presentation/controllers/schedule_providers.dart
 
-import '../../../../core/providers/network_provider.dart';
-import '../../data/datasources/schedule_remote_datasource.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/network/dio_client.dart';
 import '../../data/datasources/schedule_remote_datasource_impl.dart';
 import '../../data/repositories/schedule_repository_impl.dart';
 import '../../domain/usecases/get_courses_usecase.dart';
 
+final dioClientProvider = Provider<DioClient>((ref) => DioClient());
+
 final scheduleRemoteDataSourceProvider =
-    Provider<ScheduleRemoteDataSource>((ref) {
-  final dioClient = ref.watch(
-    dioClientProvider,
-  );
+    Provider((ref) => ScheduleRemoteDataSourceImpl(ref.watch(dioClientProvider)));
 
-  return ScheduleRemoteDataSourceImpl(
-    dioClient,
-  );
-});
-
-final scheduleRepositoryProvider =
-    Provider((ref) {
-  final remoteDataSource = ref.watch(
-    scheduleRemoteDataSourceProvider,
-  );
-
-  return ScheduleRepositoryImpl(
-    remoteDataSource,
-  );
-});
+final scheduleRepositoryProvider = Provider(
+    (ref) => ScheduleRepositoryImpl(ref.watch(scheduleRemoteDataSourceProvider)));
 
 final getCoursesUseCaseProvider =
-    Provider((ref) {
-  final repository = ref.watch(
-    scheduleRepositoryProvider,
-  );
-
-  return GetCoursesUseCase(
-    repository,
-  );
-});
+    Provider((ref) => GetCoursesUseCase(ref.watch(scheduleRepositoryProvider)));

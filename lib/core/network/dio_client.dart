@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'api_constants.dart';
 import 'dio_interceptors.dart';
 import 'network_exceptions.dart';
-
 class DioClient {
   late final Dio dio;
 

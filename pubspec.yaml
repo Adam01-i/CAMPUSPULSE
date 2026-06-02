@@ -28,12 +28,18 @@ dependencies:
   hive_flutter: ^1.1.0
 
   # Notifications
-  flutter_local_notifications: ^17.2.2
+  flutter_local_notifications: ^17.2.4
 
   # Code Generation
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   intl: ^0.20.2
+
+  firebase_core: ^4.0.0
+
+  firebase_auth: ^6.0.0
+
+  cloud_firestore: ^6.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1065311486724",
+    "project_id": "campuspulse-6ea48",
+    "storage_bucket": "campuspulse-6ea48.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065311486724:android:052df38e0c6fd312230651",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaOZm4Fhn049InnsSbXMQMbnuTb_JTbME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

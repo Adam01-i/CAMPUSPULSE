@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// ✅ TES VRAIES PAGES (IMPORTANT)
 import '../../../dashboard/presentation/pages/dashboard_page.dart';
 import '../../../schedule/presentation/pages/schedule_page.dart';
 import '../../../notifications/presentation/pages/notifications_page.dart';

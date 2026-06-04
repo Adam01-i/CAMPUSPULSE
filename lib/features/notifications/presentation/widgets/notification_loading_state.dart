@@ -55,7 +55,7 @@ class _SkeletonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color =
-        Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.7);
+        Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.7);
     return Container(
       height: 84,
       decoration: BoxDecoration(

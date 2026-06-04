@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/notification_entity.dart';
-import '../controllers/notifications_controller.dart';
 import '../providers/notifications_providers.dart';
 import '../widgets/notification_card.dart';
 import '../widgets/notification_empty_state.dart';

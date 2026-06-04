@@ -159,7 +159,7 @@ class _TimelineItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: status == CourseStatus.running
                           ? statusColor.withOpacity(0.08)
-                          : colorScheme.surfaceVariant.withOpacity(0.5),
+                          : colorScheme.surfaceContainerHighest.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: status == CourseStatus.running

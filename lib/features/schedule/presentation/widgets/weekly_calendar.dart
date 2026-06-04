@@ -204,7 +204,7 @@ class _NavButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: colorScheme.surfaceVariant.withOpacity(0.5),
+          color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, size: 20, color: colorScheme.onSurfaceVariant),

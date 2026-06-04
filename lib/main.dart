@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
 
-import 'core/services/notification_service.dart';
+// import 'core/services/notification_service.dart';
 import 'features/navigation/presentation/pages/main_navigation_page.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
@@ -19,9 +19,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (!Platform.isLinux) {
-    await NotificationService.instance.initialize();
-  }
+if (!Platform.isLinux) {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
 
   await initializeDateFormatting(
     'fr_FR',

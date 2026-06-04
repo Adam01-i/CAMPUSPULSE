@@ -43,7 +43,7 @@ class _ScheduleScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       body: child,
     );
   }
@@ -70,7 +70,7 @@ class _ScheduleContent extends ConsumerWidget {
             expandedHeight: 0,
             floating: true,
             snap: true,
-            backgroundColor: colorScheme.background,
+            backgroundColor: colorScheme.surface,
             elevation: 0,
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _ScheduleContent extends ConsumerWidget {
                   'Planning',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: colorScheme.onBackground,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],

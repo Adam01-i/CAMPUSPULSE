@@ -1,5 +1,7 @@
 // lib/features/schedule/presentation/widgets/course_card.dart
 
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../../domain/entities/course_entity.dart';
 import '../../domain/entities/course_status.dart';
@@ -71,7 +73,7 @@ class CourseCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceVariant,
+                        color: colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(

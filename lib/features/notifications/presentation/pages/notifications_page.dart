@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/notification_entity.dart';
-import '../providers/notifications_providers.dart';
 import '../widgets/notification_card.dart';
 import '../widgets/notification_empty_state.dart';
 import '../widgets/notification_error_state.dart';
 import '../widgets/notification_loading_state.dart';
+import '../providers/notifications_providers.dart';
 
 // ─── Filtre actif ────────────────────────────
 enum _Filter { all, unread, course, reminder, admin }

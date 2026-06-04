@@ -16,19 +16,27 @@ class ProfileModel extends ProfileEntity {
     required super.isActive,
   });
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
-        id: json['id']?.toString() ?? '',
-        firstName: (json['fullName'] ?? '').toString().split(' ').first,
-        lastName:
-            (json['fullName'] ?? '').toString().split(' ').skip(1).join(' '),
-        email: json['email']?.toString() ?? '',
-        studentId: json['studentId']?.toString() ?? '',
-        department: json['department']?.toString() ?? '',
-        program: json['program']?.toString() ?? '',
-        level: json['level']?.toString() ?? '',
-        avatarUrl: json['avatarUrl']?.toString(),
-        isActive: json['isActive'] ?? true,
-      );
+  factory ProfileModel.fromJson(Map<String, dynamic> json) {
+    final rawAvatarUrl = json['avatarUrl']?.toString();
+    final avatarUrl = rawAvatarUrl == null || rawAvatarUrl.trim().isEmpty ||
+            rawAvatarUrl.trim().toLowerCase() == 'null'
+        ? null
+        : rawAvatarUrl.trim();
+
+    return ProfileModel(
+      id: json['id']?.toString() ?? '',
+      firstName: (json['fullName'] ?? '').toString().split(' ').first,
+      lastName:
+          (json['fullName'] ?? '').toString().split(' ').skip(1).join(' '),
+      email: json['email']?.toString() ?? '',
+      studentId: json['studentId']?.toString() ?? '',
+      department: json['department']?.toString() ?? '',
+      program: json['program']?.toString() ?? '',
+      level: json['level']?.toString() ?? '',
+      avatarUrl: avatarUrl,
+      isActive: json['isActive'] ?? true,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

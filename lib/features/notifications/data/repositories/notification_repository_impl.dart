@@ -6,31 +6,41 @@ import '../datasources/notification_local_datasource.dart';
 import '../models/notification_model.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-  final NotificationLocalDataSource localDataSource;
+  final NotificationLocalDataSource remoteDataSource;
 
-  NotificationRepositoryImpl(this.localDataSource);
-
-  @override
-  Future<List<NotificationEntity>> getNotifications() =>
-      localDataSource.getNotifications();
+  NotificationRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<void> markAsRead(String id) async {
-    final notifications = await localDataSource.getNotifications();
-    final notif = notifications.firstWhere((n) => n.id == id);
-    final updated = NotificationModel.fromEntity(notif.copyWith(isRead: true));
-    await localDataSource.updateNotification(updated);
+  Future<List<NotificationEntity>> getNotifications() {
+    return remoteDataSource.getNotifications();
   }
 
   @override
-  Future<void> markAllAsRead() => localDataSource.markAllAsRead();
+  Future<void> markAsRead(String id) async {
+    final notifications = await remoteDataSource.getNotifications();
+    final notif = notifications.firstWhere((n) => n.id == id);
+
+    final updated = NotificationModel.fromEntity(
+      notif.copyWith(isRead: true),
+    );
+
+    await remoteDataSource.updateNotification(updated);
+  }
 
   @override
-  Future<void> addNotification(NotificationEntity notification) =>
-      localDataSource.saveNotification(
-          NotificationModel.fromEntity(notification));
+  Future<void> markAllAsRead() {
+    return remoteDataSource.markAllAsRead();
+  }
 
   @override
-  Future<void> deleteNotification(String id) =>
-      localDataSource.deleteNotification(id);
+  Future<void> addNotification(NotificationEntity notification) {
+    return remoteDataSource.saveNotification(
+      NotificationModel.fromEntity(notification),
+    );
+  }
+
+  @override
+  Future<void> deleteNotification(String id) {
+    return remoteDataSource.deleteNotification(id);
+  }
 }

@@ -26,6 +26,7 @@ class NotificationsController
   Future<void> loadNotifications() async {
     try {
       state = const AsyncValue.loading();
+
       final notifications = await getNotifications();
       state = AsyncValue.data(notifications);
     } catch (e, st) {
@@ -58,12 +59,10 @@ class NotificationsController
   }
 
   Future<void> deleteNotification(
-      String id,
-      Future<void> Function(String) deleteFromRepo) async {
+      String id, Future<void> Function(String) deleteFromRepo) async {
     await deleteFromRepo(id);
     await refreshNotifications();
   }
 
-  int get unreadCount =>
-      state.valueOrNull?.where((n) => !n.isRead).length ?? 0;
+  int get unreadCount => state.valueOrNull?.where((n) => !n.isRead).length ?? 0;
 }

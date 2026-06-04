@@ -12,13 +12,27 @@ class CourseModel extends CourseEntity {
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json, String docId) {
+    final rawStart = json['start_time'] ?? json['startTime'];
+    final rawEnd = json['end_time'] ?? json['endTime'];
+
+    DateTime parseDateTime(dynamic raw) {
+      if (raw is Timestamp) return raw.toDate();
+      if (raw is DateTime) return raw;
+      if (raw is String) {
+        final parsed = DateTime.tryParse(raw);
+        if (parsed != null) return parsed;
+      }
+
+      throw FormatException('Format de date invalide : $raw');
+    }
+
     return CourseModel(
       id: docId,
       title: json['title'] ?? '',
       room: json['room'] ?? '',
       teacher: json['teacher'] ?? '',
-      startTime: (json['start_time'] as Timestamp).toDate(),
-      endTime: (json['end_time'] as Timestamp).toDate(),
+      startTime: parseDateTime(rawStart),
+      endTime: parseDateTime(rawEnd),
     );
   }
 

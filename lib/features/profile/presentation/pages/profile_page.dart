@@ -327,17 +327,22 @@ class _ProfileIdentityCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: profile.avatarUrl != null
+                child: profile.avatarUrl != null &&
+                        profile.avatarUrl!.trim().isNotEmpty &&
+                        profile.avatarUrl!.trim().toLowerCase() != 'null'
                     ? ClipOval(
                         child: Image.network(
-                        profile.avatarUrl!,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) return child;
-                          return const CircularProgressIndicator(
-                              strokeWidth: 2);
-                        },
-                      ))
+                          profile.avatarUrl!.trim(),
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return const CircularProgressIndicator(
+                                strokeWidth: 2);
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              _AvatarInitials(initials: profile.initials),
+                        ),
+                      )
                     : _AvatarInitials(initials: profile.initials),
               ),
               Positioned(

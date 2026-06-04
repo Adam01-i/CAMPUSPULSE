@@ -12,16 +12,12 @@ class ProfileController extends StateNotifier<AsyncValue<ProfileEntity>> {
   }
 
 Future<void> loadProfile() async {
-  print("🔥 LOAD PROFILE START");
   state = const AsyncLoading();
 
   try {
     final profile = await _getProfile();
-    print("🔥 PROFILE LOADED = $profile");
-
     state = AsyncData(profile);
   } catch (e) {
-    print("🔥 PROFILE ERROR = $e");
     state = AsyncError(e, StackTrace.current);
   }
 }

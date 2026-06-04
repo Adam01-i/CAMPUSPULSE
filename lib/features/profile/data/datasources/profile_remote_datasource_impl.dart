@@ -21,12 +21,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       throw Exception("Utilisateur non connecté");
     }
 
-    print("UID AUTH = ${user.uid}");
-
     final doc = await firestore.collection('users').doc(user.uid).get();
-
-    print("DOC EXISTS = ${doc.exists}");
-    print("DOC DATA = ${doc.data()}");
 
     if (!doc.exists || doc.data() == null) {
       throw Exception("Profil introuvable");

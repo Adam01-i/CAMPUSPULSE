@@ -19,9 +19,7 @@ final getProfileUseCaseProvider = Provider(
 );
 
 final profileControllerProvider =
-    StateNotifierProvider<
-        ProfileController,
-        AsyncValue<ProfileEntity>>(
+    StateNotifierProvider<ProfileController, AsyncValue<ProfileEntity>>(
   (ref) => ProfileController(
     ref.watch(getProfileUseCaseProvider),
   ),

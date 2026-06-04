@@ -1,6 +1,7 @@
 // lib/features/profile/presentation/pages/profile_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/features/auth/presentation/controllers/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../controllers/profile_providers.dart';
@@ -685,18 +686,25 @@ class _ActionSettingsItem extends StatelessWidget {
 // ─────────────────────────────────────────────
 // Logout Button
 // ─────────────────────────────────────────────
-class _LogoutButton extends StatelessWidget {
+// lib/features/profile/presentation/pages/profile_page.dart
+// Remplacer uniquement _LogoutButton
+
+class _LogoutButton extends ConsumerWidget {
+  const _LogoutButton();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+
     return Material(
       color: colorScheme.errorContainer.withOpacity(0.4),
       borderRadius: BorderRadius.circular(18),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
-        onTap: () => _showLogoutDialog(context),
+        onTap: () => _showLogoutDialog(context, ref),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -717,7 +725,7 @@ class _LogoutButton extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     showDialog(
       context: context,
@@ -725,7 +733,8 @@ class _LogoutButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24)),
         title: const Text('Déconnexion'),
-        content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+        content:
+            const Text('Voulez-vous vraiment vous déconnecter ?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -733,12 +742,12 @@ class _LogoutButton extends StatelessWidget {
           ),
           FilledButton(
             style: FilledButton.styleFrom(
-              backgroundColor: colorScheme.error,
-            ),
+                backgroundColor: colorScheme.error),
             onPressed: () {
               Navigator.of(ctx).pop();
-              // TODO: Implémenter LogoutUseCase + Firebase Auth
-              // ref.read(authControllerProvider.notifier).logout();
+              ref
+                  .read(authControllerProvider.notifier)
+                  .logout();
             },
             child: const Text('Déconnexion'),
           ),

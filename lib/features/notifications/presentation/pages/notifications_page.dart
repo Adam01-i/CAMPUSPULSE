@@ -10,7 +10,7 @@ import '../widgets/notification_loading_state.dart';
 import '../providers/notifications_providers.dart';
 
 // ─── Filtre actif ────────────────────────────
-enum _Filter { all, unread, course, reminder, admin }
+enum _Filter { all, unread, course, reminder }
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -56,8 +56,6 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage>
             .toList();
       case _Filter.reminder:
         return all.where((n) => n.type == NotificationType.reminder).toList();
-      case _Filter.admin:
-        return all.where((n) => n.type == NotificationType.admin).toList();
     }
   }
 
@@ -96,7 +94,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final state = ref.watch(notificationsControllerProvider);
+    final state = ref.watch(notificationsStreamProvider);
     final unreadCount = ref.watch(unreadCountProvider);
 
     return Scaffold(
@@ -107,18 +105,17 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage>
           child: state.when(
             loading: () => const NotificationLoadingState(),
             error: (_, __) => NotificationErrorState(
-              onRetry: () => ref
-                  .read(notificationsControllerProvider.notifier)
-                  .loadNotifications(),
+              onRetry: () => ref.refresh(notificationsStreamProvider),
             ),
             data: (notifications) {
               final filtered = _applyFilter(notifications);
               final groups = _group(filtered);
 
               return RefreshIndicator(
-                onRefresh: () => ref
-                    .read(notificationsControllerProvider.notifier)
-                    .refreshNotifications(),
+                onRefresh: () async {
+                  final _ = ref.refresh(notificationsStreamProvider);
+                  return Future<void>.value();
+                },
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(),
                   slivers: [
@@ -249,7 +246,6 @@ class _FilterBar extends StatelessWidget {
       (_Filter.unread, 'Non lues'),
       (_Filter.course, 'Cours'),
       (_Filter.reminder, 'Rappels'),
-      (_Filter.admin, 'Administration'),
     ];
 
     return SizedBox(

@@ -1,7 +1,10 @@
 // lib/features/profile/presentation/pages/profile_page.dart
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_2/features/auth/presentation/controllers/auth_providers.dart';
+import 'package:flutter_application_2/features/profile/presentation/controllers/settings_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../controllers/profile_providers.dart';
@@ -17,10 +20,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;
-
-  bool _notificationsEnabled = true;
-  bool _darkModeEnabled = false;
-  bool _autoRefreshEnabled = false;
 
   @override
   void initState() {
@@ -60,17 +59,21 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
               onRetry: () =>
                   ref.read(profileControllerProvider.notifier).loadProfile(),
             ),
-            data: (profile) => _ProfileContent(
-              profile: profile,
-              notificationsEnabled: _notificationsEnabled,
-              darkModeEnabled: _darkModeEnabled,
-              autoRefreshEnabled: _autoRefreshEnabled,
-              onNotificationsChanged: (v) =>
-                  setState(() => _notificationsEnabled = v),
-              onDarkModeChanged: (v) => setState(() => _darkModeEnabled = v),
-              onAutoRefreshChanged: (v) =>
-                  setState(() => _autoRefreshEnabled = v),
-            ),
+            data: (profile) {
+              final settings = ref.watch(settingsControllerProvider);
+
+              return _ProfileContent(
+                profile: profile,
+                notificationsEnabled: settings.notificationsEnabled,
+                darkModeEnabled: settings.darkModeEnabled,
+                onNotificationsChanged: ref
+                    .read(settingsControllerProvider.notifier)
+                    .setNotificationsEnabled,
+                onDarkModeChanged: ref
+                    .read(settingsControllerProvider.notifier)
+                    .setDarkModeEnabled,
+              );
+            },
           ),
         ),
       ),
@@ -85,19 +88,15 @@ class _ProfileContent extends StatelessWidget {
   final ProfileEntity profile;
   final bool notificationsEnabled;
   final bool darkModeEnabled;
-  final bool autoRefreshEnabled;
   final ValueChanged<bool> onNotificationsChanged;
   final ValueChanged<bool> onDarkModeChanged;
-  final ValueChanged<bool> onAutoRefreshChanged;
 
   const _ProfileContent({
     required this.profile,
     required this.notificationsEnabled,
     required this.darkModeEnabled,
-    required this.autoRefreshEnabled,
     required this.onNotificationsChanged,
     required this.onDarkModeChanged,
-    required this.onAutoRefreshChanged,
   });
 
   @override
@@ -171,15 +170,6 @@ class _ProfileContent extends StatelessWidget {
                 value: darkModeEnabled,
                 onChanged: onDarkModeChanged,
               ),
-              const SizedBox(height: 8),
-              _ToggleSettingsItem(
-                icon: Icons.sync_rounded,
-                iconColor: const Color(0xFF2A9D8F),
-                title: 'Actualisation automatique',
-                subtitle: 'Mise à jour en arrière-plan',
-                value: autoRefreshEnabled,
-                onChanged: onAutoRefreshChanged,
-              ),
             ]),
           ),
         ),
@@ -202,24 +192,17 @@ class _ProfileContent extends StatelessWidget {
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               _ActionSettingsItem(
-                icon: Icons.person_outline_rounded,
-                iconColor: const Color(0xFF2A9D8F),
-                title: 'Modifier le profil',
-                onTap: () {},
-              ),
-              const SizedBox(height: 8),
-              _ActionSettingsItem(
                 icon: Icons.lock_outline_rounded,
                 iconColor: const Color(0xFFF4A261),
                 title: 'Changer le mot de passe',
-                onTap: () {},
+                onTap: () => _showChangePasswordDialog(context),
               ),
               const SizedBox(height: 8),
               _ActionSettingsItem(
                 icon: Icons.help_outline_rounded,
                 iconColor: const Color(0xFF4CC9F0),
                 title: 'Aide & Support',
-                onTap: () {},
+                onTap: () => _showHelpSupportDialog(context),
               ),
               const SizedBox(height: 8),
               _ActionSettingsItem(
@@ -258,6 +241,98 @@ class _ProfileContent extends StatelessWidget {
     );
   }
 
+  void _showChangePasswordDialog(BuildContext context) {
+    final email = FirebaseAuth.instance.currentUser?.email;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Changer le mot de passe'),
+        content: Text(
+          email != null
+              ? 'Un email de réinitialisation de mot de passe sera envoyé à :\n$email'
+              : 'Aucun email utilisateur disponible. Veuillez vous reconnecter et réessayer.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: email == null
+                ? null
+                : () async {
+                    try {
+                      await FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: email);
+                      if (ctx.mounted) {
+                        Navigator.of(ctx).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Un email de réinitialisation a été envoyé à $email.',
+                            ),
+                          ),
+                        );
+                      }
+                    } catch (error) {
+                      if (ctx.mounted) {
+                        Navigator.of(ctx).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Impossible d\'envoyer l\'email. Vérifiez votre connexion.',
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+            child: const Text('Envoyer l\'email'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showHelpSupportDialog(BuildContext context) {
+    const supportEmail = 'support@campuspulse.app';
+    const supportPhone = '+33 1 23 45 67 89';
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Aide & Support'),
+        content: Text(
+          'Besoin d\'aide ?\n\n'
+          'Envoyez un email à $supportEmail ou contactez-nous par téléphone au $supportPhone.\n\n'
+          'Notre équipe support répond sous 24h.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Fermer'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Clipboard.setData(const ClipboardData(text: supportEmail));
+              if (ctx.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Adresse email copiée dans le presse-papiers.'),
+                  ),
+                );
+              }
+            },
+            child: const Text('Copier l\'email'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -265,7 +340,9 @@ class _ProfileContent extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text('À propos'),
         content: const Text(
-          'CampusPulse v1.0.0\n\nApplication universitaire de suivi de planning et notifications.\n\n© 2025 UAD',
+          'CampusPulse v1.0.0\n\nApplication universitaire de suivi de planning et notifications.\n\n' 
+          'Version stable avec alertes, planning et profil.\n\n' 
+          'Pour toute question, envoyez un email à support@campuspulse.app.',
         ),
         actions: [
           FilledButton(

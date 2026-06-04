@@ -13,6 +13,48 @@ class LocalNotificationService {
     await _plugin.initialize(settings);
   }
 
+  static Future<void> showCourseAdded(CourseEntity course) async {
+    const androidDetails = AndroidNotificationDetails(
+      'course_added_channel',
+      'Nouveaux cours',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'Nouveau cours disponible',
+    );
+
+    const details = NotificationDetails(android: androidDetails);
+
+    await _plugin.show(
+      course.id.hashCode ^ 0xCAFE,
+      'Nouveau cours ajouté',
+      '${course.title} en salle ${course.room}',
+      details,
+    );
+  }
+
+  static Future<void> showRemoteNotification({
+    required String title,
+    required String body,
+    int? id,
+  }) async {
+    const androidDetails = AndroidNotificationDetails(
+      'remote_message_channel',
+      'Messages de service',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'Nouveau message',
+    );
+
+    const details = NotificationDetails(android: androidDetails);
+
+    await _plugin.show(
+      id ?? DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title,
+      body,
+      details,
+    );
+  }
+
   static Future<void> showReminder(CourseEntity course) async {
     const androidDetails = AndroidNotificationDetails(
       'reminder_channel',

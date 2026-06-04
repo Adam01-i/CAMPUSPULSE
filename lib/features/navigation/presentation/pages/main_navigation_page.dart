@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../dashboard/presentation/pages/dashboard_page.dart';
 import '../../../schedule/presentation/pages/schedule_page.dart';
 import '../../../notifications/presentation/pages/notifications_page.dart';
+import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 
 class _NavItem {
@@ -20,14 +22,14 @@ class _NavItem {
   });
 }
 
-class MainNavigationPage extends StatefulWidget {
+class MainNavigationPage extends ConsumerStatefulWidget {
   const MainNavigationPage({super.key});
 
   @override
-  State<MainNavigationPage> createState() => _MainNavigationPageState();
+  ConsumerState<MainNavigationPage> createState() => _MainNavigationPageState();
 }
 
-class _MainNavigationPageState extends State<MainNavigationPage> {
+class _MainNavigationPageState extends ConsumerState<MainNavigationPage> {
   int _currentIndex = 0;
 
   late final List<Widget> _pages = const [
@@ -35,30 +37,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     SchedulePage(),
     NotificationsPage(),
     ProfilePage(),
-  ];
-
-  final List<_NavItem> _items = const [
-    _NavItem(
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home_rounded,
-      label: 'Accueil',
-    ),
-    _NavItem(
-      icon: Icons.calendar_month_outlined,
-      activeIcon: Icons.calendar_month_rounded,
-      label: 'Planning',
-    ),
-    _NavItem(
-      icon: Icons.notifications_outlined,
-      activeIcon: Icons.notifications_rounded,
-      label: 'Alerts',
-      badgeCount: 3,
-    ),
-    _NavItem(
-      icon: Icons.person_outline_rounded,
-      activeIcon: Icons.person_rounded,
-      label: 'Profil',
-    ),
   ];
 
   void _onTap(int index) {
@@ -69,13 +47,39 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final unreadCount = ref.watch(unreadCountProvider);
+
+    final items = [
+      const _NavItem(
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home_rounded,
+        label: 'Accueil',
+      ),
+      const _NavItem(
+        icon: Icons.calendar_month_outlined,
+        activeIcon: Icons.calendar_month_rounded,
+        label: 'Planning',
+      ),
+      _NavItem(
+        icon: Icons.notifications_outlined,
+        activeIcon: Icons.notifications_rounded,
+        label: 'Alerts',
+        badgeCount: unreadCount > 0 ? unreadCount : null,
+      ),
+      const _NavItem(
+        icon: Icons.person_outline_rounded,
+        activeIcon: Icons.person_rounded,
+        label: 'Profil',
+      ),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),
       bottomNavigationBar: _BottomNavBar(
-        items: _items,
+        items: items,
         currentIndex: _currentIndex,
         onTap: _onTap,
       ),

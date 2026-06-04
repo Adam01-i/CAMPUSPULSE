@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../domain/entities/notification_entity.dart';
 import '../models/notification_model.dart';
 import 'notification_local_datasource.dart';
 
@@ -14,6 +15,19 @@ class NotificationRemoteDataSourceImpl implements NotificationLocalDataSource {
         .orderBy('createdAt', descending: true)
         .get();
 
+    return _decodeNotifications(snapshot);
+  }
+
+  Stream<List<NotificationModel>> watchNotifications() {
+    return firestore
+        .collection('notifications')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(_decodeNotifications);
+  }
+
+  List<NotificationModel> _decodeNotifications(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       final data = doc.data();
       data['id'] = doc.id;
@@ -31,7 +45,7 @@ class NotificationRemoteDataSourceImpl implements NotificationLocalDataSource {
         ...data,
         'createdAt': createdAt.toIso8601String(),
       });
-    }).toList();
+    }).where((notification) => notification.type != NotificationType.admin).toList();
   }
 
   @override

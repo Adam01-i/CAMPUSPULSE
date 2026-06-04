@@ -1,6 +1,7 @@
 // lib/features/auth/presentation/controllers/auth_controller.dart
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_2/core/services/fcm_service.dart';
 import '../../domain/entities/auth_user_entity.dart';
 import '../../domain/usecases/get_current_user_usecase.dart';
 import '../../domain/usecases/sign_in_usecase.dart';
@@ -54,10 +55,19 @@ class AuthController extends StateNotifier<AuthState> {
     authStateChanges.listen((user) {
       if (user != null) {
         state = AuthAuthenticated(user);
+        _registerFcmToken(user.uid);
       } else {
         state = const AuthUnauthenticated();
       }
     });
+  }
+
+  Future<void> _registerFcmToken(String userId) async {
+    try {
+      await FCMService.init(userId);
+    } catch (_) {
+      // Token registration must not block auth flow.
+    }
   }
 
   Future<void> login({

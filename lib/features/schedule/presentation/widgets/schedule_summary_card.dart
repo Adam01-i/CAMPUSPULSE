@@ -20,18 +20,47 @@ class ScheduleSummaryCard extends ConsumerWidget {
 
     final nextCourse = allCoursesAsync.valueOrNull?.nextUpcoming;
 
+    final cardGradient = theme.brightness == Brightness.dark
+        ? LinearGradient(
+            colors: [
+              colorScheme.surfaceVariant,
+              colorScheme.secondaryContainer,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )
+        : LinearGradient(
+            colors: [colorScheme.primary, colorScheme.secondary],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          );
+
+    final headerTextColor = theme.brightness == Brightness.dark
+        ? colorScheme.onSurface
+        : Colors.white;
+
+    final subtitleTextColor = theme.brightness == Brightness.dark
+        ? colorScheme.onSurfaceVariant
+        : Colors.white70;
+
+    final cardBackgroundColor = theme.brightness == Brightness.dark
+        ? colorScheme.surface
+        : null;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [colorScheme.primary, colorScheme.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: cardBackgroundColor,
+        gradient: theme.brightness == Brightness.dark ? null : cardGradient,
         borderRadius: BorderRadius.circular(24),
+        border: theme.brightness == Brightness.dark
+            ? Border.all(color: colorScheme.surfaceVariant.withOpacity(0.15))
+            : null,
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withOpacity(0.3),
+            color: theme.brightness == Brightness.dark
+                ? colorScheme.shadow.withOpacity(0.12)
+                : colorScheme.primary.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -63,14 +92,14 @@ class ScheduleSummaryCard extends ConsumerWidget {
                     Text(
                       'Résumé Planning',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
+                        color: headerTextColor,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
                       '${todayCourses.length} cours aujourd\'hui · ${weekCourses.length} cette semaine',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white70,
+                        color: subtitleTextColor,
                       ),
                     ),
                   ],
@@ -95,12 +124,16 @@ class ScheduleSummaryCard extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: theme.brightness == Brightness.dark
+                          ? colorScheme.surfaceVariant.withOpacity(0.14)
+                          : Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.schedule_rounded,
-                      color: Colors.white,
+                      color: theme.brightness == Brightness.dark
+                          ? colorScheme.onSurface
+                          : Colors.white,
                       size: 18,
                     ),
                   ),
@@ -112,13 +145,13 @@ class ScheduleSummaryCard extends ConsumerWidget {
                         Text(
                           'Prochain cours',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: Colors.white70,
+                            color: subtitleTextColor,
                           ),
                         ),
                         Text(
                           nextCourse.title,
                           style: theme.textTheme.titleSmall?.copyWith(
-                            color: Colors.white,
+                            color: headerTextColor,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -129,13 +162,17 @@ class ScheduleSummaryCard extends ConsumerWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: theme.brightness == Brightness.dark
+                          ? colorScheme.surfaceVariant.withOpacity(0.14)
+                          : Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       'Dans ${nextCourse.remainingFormatted}',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: theme.brightness == Brightness.dark
+                            ? colorScheme.onSurface
+                            : Colors.white,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),

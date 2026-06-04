@@ -62,9 +62,14 @@ final notificationsControllerProvider = StateNotifierProvider<
   },
 );
 
-/// UNREAD COUNT PROVIDER (manquant chez toi)
+final notificationsStreamProvider = StreamProvider<List<NotificationEntity>>(
+  (ref) {
+    return ref.watch(notificationRemoteDataSourceProvider).watchNotifications();
+  },
+);
+
 final unreadCountProvider = Provider<int>((ref) {
-  final state = ref.watch(notificationsControllerProvider);
+  final state = ref.watch(notificationsStreamProvider);
 
   return state.maybeWhen(
     data: (list) => list.where((n) => n.isRead == false).length,

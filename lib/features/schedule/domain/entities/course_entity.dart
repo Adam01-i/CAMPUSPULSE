@@ -1,5 +1,5 @@
 class CourseEntity {
-  final int id;
+  final String id;
   final String title;
   final String room;
   final String teacher;

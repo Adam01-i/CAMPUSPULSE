@@ -1,5 +1,6 @@
 // lib/features/schedule/presentation/controllers/schedule_providers.dart
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../data/datasources/schedule_remote_datasource_impl.dart';
@@ -9,7 +10,7 @@ import '../../domain/usecases/get_courses_usecase.dart';
 final dioClientProvider = Provider<DioClient>((ref) => DioClient());
 
 final scheduleRemoteDataSourceProvider =
-    Provider((ref) => ScheduleRemoteDataSourceImpl(ref.watch(dioClientProvider)));
+    Provider((ref) => ScheduleRemoteDataSourceImpl(FirebaseFirestore.instance));
 
 final scheduleRepositoryProvider = Provider(
     (ref) => ScheduleRepositoryImpl(ref.watch(scheduleRemoteDataSourceProvider)));

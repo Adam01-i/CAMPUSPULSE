@@ -1,25 +1,37 @@
-// lib/features/profile/data/datasources/profile_remote_datasource_impl.dart
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/profile_model.dart';
 import 'profile_remote_datasource.dart';
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
+  final FirebaseFirestore firestore;
+  final FirebaseAuth auth;
+
+  ProfileRemoteDataSourceImpl({
+    FirebaseFirestore? firestore,
+    FirebaseAuth? auth,
+  })  : firestore = firestore ?? FirebaseFirestore.instance,
+        auth = auth ?? FirebaseAuth.instance;
+
   @override
   Future<ProfileModel> getProfile() async {
-    // Délai simulé — remplacer par un vrai appel Dio/Firebase plus tard
-    await Future.delayed(const Duration(seconds: 1));
+    final user = auth.currentUser;
 
-    return ProfileModel.fromJson({
-      'id': 'usr_001',
-      'first_name': 'Awa',
-      'last_name': 'Seck',
-      'email': 'adama.seck@uad.edu.sn',
-      'student_id': 'SI20250021',
-      'department': 'TIC',
-      'program': 'Master Systèmes d\'Information',
-      'level': 'Master 1',
-      'avatar_url': null,
-      'is_active': true,
-    });
+    if (user == null) {
+      throw Exception("Utilisateur non connecté");
+    }
+
+    print("UID AUTH = ${user.uid}");
+
+    final doc = await firestore.collection('users').doc(user.uid).get();
+
+    print("DOC EXISTS = ${doc.exists}");
+    print("DOC DATA = ${doc.data()}");
+
+    if (!doc.exists || doc.data() == null) {
+      throw Exception("Profil introuvable");
+    }
+
+    return ProfileModel.fromJson(doc.data()!);
   }
 }

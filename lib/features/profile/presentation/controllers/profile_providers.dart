@@ -1,5 +1,7 @@
 // lib/features/profile/presentation/controllers/profile_providers.dart
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasources/profile_remote_datasource_impl.dart';
 import '../../data/repositories/profile_repository_impl.dart';
@@ -7,8 +9,12 @@ import '../../domain/usecases/get_profile_usecase.dart';
 import 'profile_controller.dart';
 import '../../domain/entities/profile_entity.dart';
 
-final profileRemoteDataSourceProvider =
-    Provider((_) => ProfileRemoteDataSourceImpl());
+final profileRemoteDataSourceProvider = Provider(
+  (ref) => ProfileRemoteDataSourceImpl(
+    firestore: FirebaseFirestore.instance,
+    auth: FirebaseAuth.instance,
+  ),
+);
 
 final profileRepositoryProvider = Provider(
   (ref) => ProfileRepositoryImpl(ref.watch(profileRemoteDataSourceProvider)),

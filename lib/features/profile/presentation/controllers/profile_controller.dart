@@ -4,31 +4,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 
-class ProfileController
-    extends StateNotifier<AsyncValue<ProfileEntity>> {
+class ProfileController extends StateNotifier<AsyncValue<ProfileEntity>> {
   final GetProfileUseCase _getProfile;
 
-  ProfileController(this._getProfile)
-      : super(const AsyncValue.loading()) {
+  ProfileController(this._getProfile) : super(const AsyncValue.loading()) {
     loadProfile();
   }
 
-  Future<void> loadProfile() async {
-    try {
-      state = const AsyncValue.loading();
-      final profile = await _getProfile();
-      state = AsyncValue.data(profile);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+Future<void> loadProfile() async {
+  print("🔥 LOAD PROFILE START");
+  state = const AsyncLoading();
+
+  try {
+    final profile = await _getProfile();
+    print("🔥 PROFILE LOADED = $profile");
+
+    state = AsyncData(profile);
+  } catch (e) {
+    print("🔥 PROFILE ERROR = $e");
+    state = AsyncError(e, StackTrace.current);
   }
+}
 
   Future<void> refreshProfile() async {
-    try {
-      final profile = await _getProfile();
-      state = AsyncValue.data(profile);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    state = const AsyncValue.loading();
+    await loadProfile();
   }
 }

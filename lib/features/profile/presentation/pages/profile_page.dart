@@ -25,12 +25,17 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..forward();
-    _fadeAnim =
-        CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+
+    _fadeAnim = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+
   }
 
   @override
@@ -52,9 +57,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
           child: profileState.when(
             loading: () => const _ProfileSkeleton(),
             error: (_, __) => _ProfileErrorState(
-              onRetry: () => ref
-                  .read(profileControllerProvider.notifier)
-                  .loadProfile(),
+              onRetry: () =>
+                  ref.read(profileControllerProvider.notifier).loadProfile(),
             ),
             data: (profile) => _ProfileContent(
               profile: profile,
@@ -63,8 +67,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
               autoRefreshEnabled: _autoRefreshEnabled,
               onNotificationsChanged: (v) =>
                   setState(() => _notificationsEnabled = v),
-              onDarkModeChanged: (v) =>
-                  setState(() => _darkModeEnabled = v),
+              onDarkModeChanged: (v) => setState(() => _darkModeEnabled = v),
               onAutoRefreshChanged: (v) =>
                   setState(() => _autoRefreshEnabled = v),
             ),
@@ -259,8 +262,7 @@ class _ProfileContent extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text('À propos'),
         content: const Text(
           'CampusPulse v1.0.0\n\nApplication universitaire de suivi de planning et notifications.\n\n© 2025 UAD',
@@ -328,12 +330,14 @@ class _ProfileIdentityCard extends StatelessWidget {
                 child: profile.avatarUrl != null
                     ? ClipOval(
                         child: Image.network(
-                          profile.avatarUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              _AvatarInitials(initials: profile.initials),
-                        ),
-                      )
+                        profile.avatarUrl!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, progress) {
+                          if (progress == null) return child;
+                          return const CircularProgressIndicator(
+                              strokeWidth: 2);
+                        },
+                      ))
                     : _AvatarInitials(initials: profile.initials),
               ),
               Positioned(
@@ -375,15 +379,14 @@ class _ProfileIdentityCard extends StatelessWidget {
                 Text(
                   profile.email,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onPrimaryContainer
-                            .withOpacity(0.75),
+                        color: colorScheme.onPrimaryContainer.withOpacity(0.75),
                       ),
                 ),
                 const SizedBox(height: 10),
                 // Badge statut
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: colorScheme.onPrimaryContainer.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
@@ -404,10 +407,7 @@ class _ProfileIdentityCard extends StatelessWidget {
                       const SizedBox(width: 5),
                       Text(
                         isActive ? 'Étudiant actif' : 'Compte inactif',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.w600,
                             ),
@@ -703,13 +703,11 @@ class _LogoutButton extends ConsumerWidget {
         borderRadius: BorderRadius.circular(18),
         onTap: () => _showLogoutDialog(context, ref),
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.logout_rounded,
-                  color: colorScheme.error, size: 20),
+              Icon(Icons.logout_rounded, color: colorScheme.error, size: 20),
               const SizedBox(width: 10),
               Text(
                 'Se déconnecter',
@@ -730,24 +728,19 @@ class _LogoutButton extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text('Déconnexion'),
-        content:
-            const Text('Voulez-vous vraiment vous déconnecter ?'),
+        content: const Text('Voulez-vous vraiment vous déconnecter ?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: const Text('Annuler'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(
-                backgroundColor: colorScheme.error),
+            style: FilledButton.styleFrom(backgroundColor: colorScheme.error),
             onPressed: () {
               Navigator.of(ctx).pop();
-              ref
-                  .read(authControllerProvider.notifier)
-                  .logout();
+              ref.read(authControllerProvider.notifier).logout();
             },
             child: const Text('Déconnexion'),
           ),
@@ -774,7 +767,8 @@ class _ProfileSkeletonState extends State<_ProfileSkeleton>
     duration: const Duration(milliseconds: 1100),
   )..repeat(reverse: true);
 
-  late final Animation<double> _anim = Tween<double>(begin: 0.35, end: 0.85).animate(
+  late final Animation<double> _anim =
+      Tween<double>(begin: 0.35, end: 0.85).animate(
     CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
   );
 
@@ -836,10 +830,7 @@ class _SkeletonBox extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .surfaceVariant
-            .withOpacity(0.6),
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
     );
@@ -900,8 +891,8 @@ class _ProfileErrorState extends StatelessWidget {
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Réessayer'),
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
               ),

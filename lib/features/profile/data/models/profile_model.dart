@@ -17,16 +17,17 @@ class ProfileModel extends ProfileEntity {
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
-        id: json['id'] as String,
-        firstName: json['first_name'] as String,
-        lastName: json['last_name'] as String,
-        email: json['email'] as String,
-        studentId: json['student_id'] as String,
-        department: json['department'] as String,
-        program: json['program'] as String,
-        level: json['level'] as String,
-        avatarUrl: json['avatar_url'] as String?,
-        isActive: json['is_active'] as bool? ?? true,
+        id: json['id']?.toString() ?? '',
+        firstName: (json['fullName'] ?? '').toString().split(' ').first,
+        lastName:
+            (json['fullName'] ?? '').toString().split(' ').skip(1).join(' '),
+        email: json['email']?.toString() ?? '',
+        studentId: json['studentId']?.toString() ?? '',
+        department: json['department']?.toString() ?? '',
+        program: json['program']?.toString() ?? '',
+        level: json['level']?.toString() ?? '',
+        avatarUrl: json['avatarUrl']?.toString(),
+        isActive: json['isActive'] ?? true,
       );
 
   Map<String, dynamic> toJson() => {

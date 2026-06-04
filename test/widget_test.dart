@@ -34,7 +34,7 @@ class TestApp extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _TestAppState createState() => _TestAppState();
-}
+lib/features/profile/domain/repositories}
 
 class _TestAppState extends State<TestApp> {
   int _counter = 0;

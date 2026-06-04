@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../schedule/domain/entities/course_entity.dart';
 import '../../../schedule/presentation/pages/course_details_page.dart';
+import '../../../profile/presentation/controllers/profile_providers.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DASHBOARD PAGE — UI/UX refondue, logique métier inchangée
@@ -47,6 +48,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage>
     final colorScheme = Theme.of(context).colorScheme;
 
     final coursesState = ref.watch(scheduleControllerProvider);
+    final profileState = ref.watch(profileControllerProvider);
     final totalCourses = coursesState.when(
       data: (courses) => courses.length,
       loading: () => 0,
@@ -86,7 +88,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage>
                 // ── Header ────────────────────────────────────────────
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
-                  sliver: SliverToBoxAdapter(child: _DashHeader()),
+                  sliver: SliverToBoxAdapter(
+                    child: _DashHeader(
+                      profileState: profileState,
+                    ),
+                  ),
                 ),
 
                 // ── Next course card ──────────────────────────────────
@@ -202,10 +208,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage>
 // Header
 // ─────────────────────────────────────────────
 class _DashHeader extends StatelessWidget {
+  final AsyncValue profileState;
+
+  const _DashHeader({
+    required this.profileState,
+  });
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+
+    final firstName = profileState.maybeWhen(
+      data: (profile) => profile.firstName,
+      orElse: () => 'Étudiant',
+    );
+
+    final initials = profileState.maybeWhen(
+      data: (profile) => profile.initials,
+      orElse: () => 'CP',
+    );
+
     return Row(
       children: [
         Expanded(
@@ -213,7 +235,7 @@ class _DashHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Bonjour, Adam 👋',
+                'Bonjour, $firstName 👋',
                 style: tt.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.4,
@@ -252,7 +274,7 @@ class _DashHeader extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  'A',
+                  initials,
                   style: TextStyle(
                     color: cs.onPrimary,
                     fontSize: 18,

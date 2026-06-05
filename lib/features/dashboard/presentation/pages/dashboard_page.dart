@@ -665,13 +665,29 @@ class _CourseRow extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => CourseDetailsPage(
-                course: course,
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(24),
               ),
             ),
+            builder: (context) {
+              return DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.62,
+                minChildSize: 0.42,
+                maxChildSize: 0.92,
+                builder: (context, controller) {
+                  return CourseDetailsSheet(
+                    course: course,
+                    scrollController: controller,
+                  );
+                },
+              );
+            },
           );
         },
         child: Padding(

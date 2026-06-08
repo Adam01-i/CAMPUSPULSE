@@ -2,7 +2,9 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_2/core/services/hive_service.dart';
+import 'package:flutter_application_2/core/services/fcm_service.dart';
 import 'package:flutter_application_2/core/services/local_notification_service.dart';
 import 'package:flutter_application_2/core/services/schedule_listener_service.dart';
 import 'package:flutter_application_2/core/services/notification_service.dart';
@@ -16,6 +18,9 @@ import 'firebase_options.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await LocalNotificationService.init();
 
   var notificationsEnabled = true;
@@ -54,6 +59,7 @@ void main() async {
   if (!Platform.isLinux) {
     try {
       await NotificationService.instance.initialize();
+      await FCMService.initialize();
     } catch (_) {
       // ignore initialization errors in silent startup
     }
@@ -79,12 +85,18 @@ void _bootstrapServices() {
     }
 
     try {
-      await NotificationService.initAppReminders(); // optional background startup
+      await NotificationService.initAppReminders();
+      await NotificationService.startDailyPlanningScheduler();
     } catch (_) {
       // ignore startup failures silently
     }
 
     if (!Platform.isLinux) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FCMService.init(user.uid);
+      }
+
       FirebaseMessaging.onMessage.listen((message) async {
         final isEnabled = HiveService.getSettingsBox()
             .get(HiveService.notificationsEnabledKey, defaultValue: true) as bool;

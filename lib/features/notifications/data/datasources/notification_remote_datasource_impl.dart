@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../models/notification_model.dart';
-import 'notification_local_datasource.dart';
+import 'notification_remote_datasource.dart';
 
-class NotificationRemoteDataSourceImpl implements NotificationLocalDataSource {
+class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final FirebaseFirestore firestore;
 
   NotificationRemoteDataSourceImpl(this.firestore);
@@ -28,32 +28,26 @@ class NotificationRemoteDataSourceImpl implements NotificationLocalDataSource {
 
   List<NotificationModel> _decodeNotifications(
       QuerySnapshot<Map<String, dynamic>> snapshot) {
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      data['id'] = doc.id;
+    return snapshot.docs
+        .map((doc) {
+          final data = doc.data();
+          data['id'] = doc.id;
 
-      final rawCreatedAt = data['createdAt'];
-      final createdAt = rawCreatedAt is Timestamp
-          ? rawCreatedAt.toDate()
-          : rawCreatedAt is String
-              ? DateTime.parse(rawCreatedAt)
-              : rawCreatedAt is DateTime
-                  ? rawCreatedAt
-                  : DateTime.now();
-
-      return NotificationModel.fromMap({
-        ...data,
-        'createdAt': createdAt.toIso8601String(),
-      });
-    }).where((notification) => notification.type != NotificationType.admin).toList();
+          return NotificationModel.fromMap(data);
+        })
+        .where((notification) => notification.type != NotificationType.admin)
+        .toList();
   }
 
   @override
   Future<void> saveNotification(NotificationModel model) async {
-    await firestore
-        .collection('notifications')
-        .doc(model.id)
-        .set(model.toMap());
+    final collection = firestore.collection('notifications');
+    final doc = model.id.isEmpty ? collection.doc() : collection.doc(model.id);
+
+    await doc.set({
+      ...model.toMap(),
+      'id': doc.id,
+    });
   }
 
   @override

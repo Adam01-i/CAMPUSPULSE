@@ -1,5 +1,4 @@
-// lib/features/notifications/data/models/notification_model.dart
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/notification_entity.dart';
 
 class NotificationModel extends NotificationEntity {
@@ -13,12 +12,34 @@ class NotificationModel extends NotificationEntity {
   });
 
   factory NotificationModel.fromMap(Map<String, dynamic> map) {
+    DateTime parseCreatedAt(dynamic value) {
+      if (value is Timestamp) return value.toDate();
+      if (value is DateTime) return value;
+      if (value is String) {
+        return DateTime.tryParse(value) ?? DateTime.now();
+      }
+      return DateTime.now();
+    }
+
+    NotificationType parseType(dynamic value) {
+      if (value is int && value >= 0 && value < NotificationType.values.length) {
+        return NotificationType.values[value];
+      }
+      if (value is String) {
+        return NotificationType.values.firstWhere(
+          (type) => type.name == value,
+          orElse: () => NotificationType.admin,
+        );
+      }
+      return NotificationType.admin;
+    }
+
     return NotificationModel(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      body: map['body'] as String,
-      createdAt: DateTime.parse(map['createdAt'] as String),
-      type: NotificationType.values[map['type'] as int],
+      id: map['id'] as String? ?? '',
+      title: map['title'] as String? ?? '',
+      body: map['body'] as String? ?? '',
+      createdAt: parseCreatedAt(map['createdAt']),
+      type: parseType(map['type']),
       isRead: map['isRead'] as bool? ?? false,
     );
   }
@@ -27,8 +48,8 @@ class NotificationModel extends NotificationEntity {
         'id': id,
         'title': title,
         'body': body,
-        'createdAt': createdAt.toIso8601String(),
-        'type': type.index,
+        'createdAt': Timestamp.fromDate(createdAt),
+        'type': type.name,
         'isRead': isRead,
       };
 

@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function adminDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && (adminDoc().role == 'admin' || adminDoc().isAdmin == true)
+        && (!('status' in adminDoc()) || adminDoc().status == 'active');
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /courses/{courseId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /notificationDispatchQueue/{itemId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    match /courseReminderQueue/{itemId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    match /adminActivityLog/{itemId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

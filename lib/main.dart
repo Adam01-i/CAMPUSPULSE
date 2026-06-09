@@ -56,15 +56,6 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  if (!Platform.isLinux) {
-    try {
-      await NotificationService.instance.initialize();
-      await FCMService.initialize();
-    } catch (_) {
-      // ignore initialization errors in silent startup
-    }
-  }
-
   await initializeDateFormatting('fr_FR', null);
 
   runApp(
@@ -73,7 +64,28 @@ void main() async {
     ),
   );
 
-  _bootstrapServices();
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await _initializePlatformServices();
+    _bootstrapServices();
+  });
+}
+
+Future<void> _initializePlatformServices() async {
+  if (Platform.isLinux) {
+    return;
+  }
+
+  try {
+    await NotificationService.instance.initialize();
+  } catch (_) {
+    // ignore initialization errors in silent startup
+  }
+
+  try {
+    await FCMService.initialize();
+  } catch (_) {
+    // ignore initialization errors in silent startup
+  }
 }
 
 void _bootstrapServices() {

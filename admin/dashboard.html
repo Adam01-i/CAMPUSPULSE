@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - CampusPulse Admin</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand"><span class="brand-mark">CP</span><span>CampusPulse</span></div>
+        <nav data-sidebar></nav>
+      </aside>
+      <main class="main">
+        <header class="topbar" data-header></header>
+        <section class="content">
+          <div class="grid stats-grid" id="statsGrid"></div>
+          <div class="grid two-col">
+            <section class="panel">
+              <div class="panel-header"><h2>Statistiques</h2><span class="badge">Temps reel</span></div>
+              <div class="panel-body"><canvas id="overviewChart" height="140"></canvas></div>
+            </section>
+            <section class="panel">
+              <div class="panel-header"><h2>Activites recentes</h2></div>
+              <div class="panel-body"><ul class="activity-list" id="activityList"></ul></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <button class="icon-button mobile-menu" data-menu-toggle>☰</button>
+    <div data-toast-root class="toast-root"></div>
+    <div data-loader class="loader"><div class="spinner"></div></div>
+    <script type="module" src="js/dashboard.js"></script>
+  </body>
+</html>

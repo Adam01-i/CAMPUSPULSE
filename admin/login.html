@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Connexion Admin - CampusPulse</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body class="login-page">
+    <main class="login-card">
+      <div class="brand">
+        <span class="brand-mark">CP</span>
+        <span>CampusPulse Admin</span>
+      </div>
+      <h1>Connexion administrateur</h1>
+      <p>Accedez au tableau de bord de gestion universitaire.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="password">Mot de passe</label>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="button" type="submit" style="width:100%">Se connecter</button>
+      </form>
+    </main>
+    <div data-toast-root class="toast-root"></div>
+    <div data-loader class="loader"><div class="spinner"></div></div>
+    <script type="module" src="js/login.js"></script>
+  </body>
+</html>

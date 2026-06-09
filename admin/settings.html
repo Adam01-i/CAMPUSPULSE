@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parametres - CampusPulse Admin</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar"><div class="brand"><span class="brand-mark">CP</span><span>CampusPulse</span></div><nav data-sidebar></nav></aside>
+      <main class="main">
+        <header class="topbar" data-header></header>
+        <section class="content grid two-col">
+          <section class="panel"><div class="panel-header"><h2>Preferences admin</h2></div><div class="panel-body"><div class="field"><label>Theme</label><select id="themeSelect"><option value="light">Clair</option><option value="dark">Sombre</option></select></div><div class="field"><label>Pagination</label><input id="pageSize" type="number" min="5" max="100" value="10"></div><button class="button" id="savePrefs">Enregistrer</button></div></section>
+          <section class="panel"><div class="panel-header"><h2>Configuration Firebase</h2></div><div class="panel-body"><pre id="firebaseConfigView"></pre></div></section>
+          <section class="panel"><div class="panel-header"><h2>Permissions</h2></div><div class="panel-body"><p>Un administrateur doit avoir dans <strong>users/{uid}</strong> : <code>role: "admin"</code> et <code>status: "active"</code>.</p></div></section>
+        </section>
+      </main>
+    </div>
+    <button class="icon-button mobile-menu" data-menu-toggle>☰</button>
+    <div data-toast-root class="toast-root"></div><div data-loader class="loader"><div class="spinner"></div></div>
+    <script type="module" src="js/settings.js"></script>
+  </body>
+</html>

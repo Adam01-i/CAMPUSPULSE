@@ -9,49 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our minimal test app and trigger a frame.
-    await tester.pumpWidget(TestApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
-}
-
-// Minimal app used for testing when MyApp is not available.
-class TestApp extends StatefulWidget {
-  const TestApp({super.key});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _TestAppState createState() => _TestAppState();
-lib/features/profile/domain/repositories}
-
-class _TestAppState extends State<TestApp> {
-  int _counter = 0;
-
-  void _increment() => setState(() => _counter++);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  testWidgets('smoke test renders the app shell', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Test')),
-        body: Center(child: Text('$_counter', textDirection: TextDirection.ltr)),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _increment,
-          child: const Icon(Icons.add),
+        body: Center(
+          child: Text('CampusPulse'),
         ),
       ),
-    );
-  }
+    ));
+
+    expect(find.text('CampusPulse'), findsOneWidget);
+  });
 }

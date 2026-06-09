@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notifications - CampusPulse Admin</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">CP</span><span>CampusPulse</span>
+        </div>
+        <nav data-sidebar></nav>
+      </aside>
+      <main class="main">
+        <header class="topbar" data-header></header>
+        <section class="content">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Centre de notifications</h2>
+              <div class="table-actions">
+                <button class="button" id="addNotification">Creer</button>
+              </div>
+            </div>
+            <div class="panel-body toolbar">
+              <input id="searchInput" placeholder="Rechercher..." /><select
+                id="typeFilter"
+              >
+                <option value="">Tous les types</option>
+                <option>newCourse</option>
+                <option>reminder</option>
+                <option>roomChanged</option>
+                <option>courseCancelled</option>
+                <option>admin</option></select
+              ><select id="readFilter">
+                <option value="">Lu et non lu</option>
+                <option value="false">Non lu</option>
+                <option value="true">Lu</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Titre</th>
+                    <th>Contenu</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="notificationsTable"></tbody>
+              </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <button class="icon-button mobile-menu" data-menu-toggle>☰</button>
+    <div class="modal" id="notificationModal">
+      <div class="modal-card">
+        <form id="notificationForm">
+          <div class="modal-header">
+            <h2 id="notificationModalTitle">Notification</h2>
+            <button type="button" class="icon-button" data-close-modal>
+              ×
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="notificationId" />
+            <div class="field">
+              <label>Titre</label><input id="title" required />
+            </div>
+            <div class="field">
+              <label>Contenu</label><textarea id="body" required></textarea>
+            </div>
+            <div class="field">
+              <label>Type</label
+              ><select id="type">
+                <option>admin</option>
+                <option>newCourse</option>
+                <option>reminder</option>
+                <option>roomChanged</option>
+                <option>courseCancelled</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Etat</label
+              ><select id="isRead">
+                <option value="false">Non lu</option>
+                <option value="true">Lu</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="button ghost" data-close-modal>
+              Annuler</button
+            ><button class="button" type="submit">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div data-toast-root class="toast-root"></div>
+    <div data-loader class="loader"><div class="spinner"></div></div>
+    <script type="module" src="js/notifications.js"></script>
+  </body>
+</html>

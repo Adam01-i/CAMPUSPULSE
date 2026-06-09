@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Etudiants - CampusPulse Admin</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf/dist/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar"><div class="brand"><span class="brand-mark">CP</span><span>CampusPulse</span></div><nav data-sidebar></nav></aside>
+      <main class="main">
+        <header class="topbar" data-header></header>
+        <section class="content">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Liste des etudiants</h2>
+              <div class="table-actions">
+                <button class="button secondary" id="exportExcel">Export Excel</button>
+                <button class="button secondary" id="exportPdf">Export PDF</button>
+                <button class="button" id="addStudent">Ajouter</button>
+              </div>
+            </div>
+            <div class="panel-body toolbar">
+              <input id="searchInput" placeholder="Rechercher..." class="field-input">
+              <select id="departmentFilter"><option value="">Tous les departements</option></select>
+              <select id="statusFilter"><option value="">Tous les statuts</option><option value="active">Actif</option><option value="inactive">Inactif</option></select>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Photo</th><th>Nom</th><th>Prenom</th><th>Email</th><th>Matricule</th><th>Departement</th><th>Filiere</th><th>Niveau</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="studentsTable"></tbody></table></div>
+            <div class="pagination" id="pagination"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <button class="icon-button mobile-menu" data-menu-toggle>☰</button>
+    <div class="modal" id="studentModal"><div class="modal-card"><form id="studentForm"><div class="modal-header"><h2 id="studentModalTitle">Etudiant</h2><button type="button" class="icon-button" data-close-modal>×</button></div><div class="modal-body"><input type="hidden" id="studentId"><div class="form-row"><div class="field" style="flex:1"><label>Nom</label><input id="lastName" required></div><div class="field" style="flex:1"><label>Prenom</label><input id="firstName" required></div></div><div class="field"><label>Email</label><input id="email" type="email" required></div><div class="form-row"><div class="field" style="flex:1"><label>Matricule</label><input id="studentNumber"></div><div class="field" style="flex:1"><label>Niveau</label><input id="level"></div></div><div class="form-row"><div class="field" style="flex:1"><label>Departement</label><input id="department"></div><div class="field" style="flex:1"><label>Filiere</label><input id="program"></div></div><div class="field"><label>URL photo</label><input id="photoUrl"></div><div class="field"><label>Statut</label><select id="status"><option value="active">Actif</option><option value="inactive">Inactif</option></select></div></div><div class="modal-footer"><button type="button" class="button ghost" data-close-modal>Annuler</button><button class="button" type="submit">Enregistrer</button></div></form></div></div>
+    <div data-toast-root class="toast-root"></div><div data-loader class="loader"><div class="spinner"></div></div>
+    <script type="module" src="js/students.js"></script>
+  </body>
+</html>

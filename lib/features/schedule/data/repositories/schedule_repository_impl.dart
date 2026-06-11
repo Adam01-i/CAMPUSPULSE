@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/features/schedule/data/models/course_model.dart';
+import '../../../../features/schedule/data/models/course_model.dart';
 
 import '../../domain/entities/course_entity.dart';
 import '../../domain/repositories/schedule_repository.dart';

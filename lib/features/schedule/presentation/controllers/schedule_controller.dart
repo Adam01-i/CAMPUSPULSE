@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/features/schedule/presentation/controllers/schedule_providers.dart';
+import '../../../../features/schedule/presentation/controllers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/course_entity.dart';

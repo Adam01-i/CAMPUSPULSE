@@ -1,4 +1,4 @@
-# flutter_application_2
+# CAMPUS PULSE
 
 A new Flutter project.
 

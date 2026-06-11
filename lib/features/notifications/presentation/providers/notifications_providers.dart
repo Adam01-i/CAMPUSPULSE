@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_application_2/features/notifications/domain/entities/notification_entity.dart';
+import '../../../../features/notifications/domain/entities/notification_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/datasources/notification_remote_datasource_impl.dart';

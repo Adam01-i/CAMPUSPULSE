@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/core/errors/exceptions.dart';
+import './exceptions.dart';
 
 String mapError(Object error) {
   if (error is NetworkException) {

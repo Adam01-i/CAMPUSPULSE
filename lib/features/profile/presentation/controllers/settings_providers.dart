@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_2/core/services/hive_service.dart';
+import '../../../../core/services/hive_service.dart';
 
 class SettingsState {
   final bool notificationsEnabled;

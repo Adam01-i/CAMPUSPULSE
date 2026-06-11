@@ -3,8 +3,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_2/features/auth/presentation/controllers/auth_providers.dart';
-import 'package:flutter_application_2/features/profile/presentation/controllers/settings_providers.dart';
+import '../../../../features/auth/presentation/controllers/auth_providers.dart';
+import '../../../../features/profile/presentation/controllers/settings_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../controllers/profile_providers.dart';

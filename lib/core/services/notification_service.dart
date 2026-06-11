@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:flutter_application_2/core/services/hive_service.dart';
-import 'package:flutter_application_2/core/services/local_notification_service.dart';
-import 'package:flutter_application_2/features/notifications/domain/entities/notification_entity.dart';
-import 'package:flutter_application_2/features/schedule/domain/entities/course_entity.dart';
+import './hive_service.dart';
+import './local_notification_service.dart';
+import '../../features/notifications/domain/entities/notification_entity.dart';
+import '../../features/schedule/domain/entities/course_entity.dart';
 
 class NotificationService {
   NotificationService._();

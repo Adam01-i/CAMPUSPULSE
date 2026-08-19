@@ -358,8 +358,6 @@ Vérification effectuée dans cet environnement :
 
 ## Captures d’écran
 
-Aucune capture d’écran n’est actuellement présente dans le dépôt. Les emplacements à prévoir sont les suivants :
-
 ### Connexion
 
 ![Connexion](docs/screenshots/login.png)
@@ -382,7 +380,12 @@ Aucune capture d’écran n’est actuellement présente dans le dépôt. Les em
 
 ### Administration
 
+![Administration](docs/screenshots/admin-connexion.png)
 ![Administration](docs/screenshots/admin-dashboard.png)
+[Administration](docs/screenshots/admin-etudiant.png)
+[Administration](docs/screenshots/admin-cours.png)
+[Administration](docs/screenshots/admin-notification.png)
+[Administration](docs/screenshots/admin-parametre.png)
 
 ## Observations, incohérences et améliorations
 

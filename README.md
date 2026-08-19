@@ -395,28 +395,13 @@ Vérification effectuée dans cet environnement :
 - Le dépôt contient une interface d’administration statique en HTML/JS, mais aucune Cloud Function.
 - Le routage GoRouter est présent dans `lib/core/router/app_router.dart`, mais l’application principale utilise actuellement `AuthGate` comme écran racine.
 - Les règles Firestore de production ne sont pas présentes ; seul un exemple est disponible.
-- Le logo et les captures d’écran référencés dans ce README ne sont pas encore présents dans `docs/`.
-
-### Points à améliorer
-
-- ajouter les dossiers `docs/images/` et `docs/screenshots/`,
-- finaliser les règles Firestore de production,
-- documenter les collections Firestore réelles avec exemples de données,
-- ajouter des tests métier au-delà du smoke test actuel,
-- compléter la logique d’admin avec un backend sécurisé si les notifications push doivent être orchestrées automatiquement.
-
-## Roadmap
-
-1. Finaliser la documentation graphique et les assets visuels.
-2. Ajouter un véritable système de règles Firestore en production.
-3. Ajouter des tests d’intégration pour les écrans principaux.
-4. Sécuriser les workflows de notifications et de rappel avec Cloud Functions.
-5. Déployer l’admin web sur Firebase Hosting.
-6. Ajouter une page de gestion complète des profils étudiants et des rôles.
 
 ## Auteurs
 
-Aucun auteur nommé n’est explicitement déclaré dans ce dépôt.
+### Adama SECK - 
+### Email : seckmote@gmail.com
+### Linkedln : https://www.linkedin.com/in/adam01-i/
+### Portfolio : https://adama-seck-portfolio.vercel.app/
 
 ## Licence
 
@@ -425,4 +410,3 @@ Aucune licence n’est déclarée dans ce dépôt actuellement.
 ## Remerciements
 
 Merci à l’écosystème Flutter, Firebase et Dart pour les composants utilisés dans ce projet.
-

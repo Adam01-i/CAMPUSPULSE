@@ -380,12 +380,12 @@ Vérification effectuée dans cet environnement :
 
 ### Administration
 
-![Administration](docs/screenshots/admin-connexion.png)
-![Administration](docs/screenshots/admin-dashboard.png)
-[Administration](docs/screenshots/admin-etudiant.png)
-[Administration](docs/screenshots/admin-cours.png)
-[Administration](docs/screenshots/admin-notification.png)
-[Administration](docs/screenshots/admin-parametre.png)
+![Administration-connexion](docs/screenshots/admin-connexion.png)
+![Administration-dashboard](docs/screenshots/admin-dashboard.png)
+![Administration-etudiant](docs/screenshots/admin-etudiant.png)
+![Administration-cours](docs/screenshots/admin-cours.png)
+![Administration-notification](docs/screenshots/admin-notification.png)
+![Administration-parametre](docs/screenshots/admin-parametre.png)
 
 ## Observations, incohérences et améliorations
 

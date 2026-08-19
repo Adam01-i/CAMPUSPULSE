@@ -376,7 +376,8 @@ Vérification effectuée dans cet environnement :
 
 ### Profil
 
-![Profil](docs/screenshots/profile.png)
+![Profil](docs/screenshots/profile-1.png)
+![Profil](docs/screenshots/profile-2.png)
 
 ### Administration
 
